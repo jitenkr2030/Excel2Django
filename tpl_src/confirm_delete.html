@@ -1,0 +1,4 @@
+{% extends "portal/base.html" %}{% block content %}
+<div class="heading"><div><p class="eyebrow">DANGER</p><h1>Delete #{{ obj.pk }}</h1></div></div>
+<div class="panel delete-panel"><p>Are you sure you want to delete this record? This action cannot be undone.</p><div class="form-actions"><form method="post" style="display:inline" onsubmit="showLoading()">{% csrf_token %}<button class="button btn-danger">Yes, Delete</button></form><a class="button secondary" href="/data/{{ model_name }}/">Cancel</a></div></div>
+{% endblock %}

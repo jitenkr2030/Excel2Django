@@ -1,0 +1,10 @@
+{% extends "portal/base.html" %}{% block content %}
+<div class="heading"><div><p class="eyebrow">{{ action|upper }}</p><h1>{{ title }}</h1></div><a class="button secondary" href="/data/{{ model_name }}/">Cancel</a></div>
+<div class="panel"><form method="post" class="form-grid" enctype="multipart/form-data" onsubmit="return validateForm(this)">{% csrf_token %}
+{% if form.non_field_errors %}<div class="toast toast-error">{{ form.non_field_errors }}</div>{% endif %}
+{% for field in form %}<div class="form-group"><label>{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}{% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}{% if field.help_text %}<small style="color:var(--muted);font-size:.75rem;display:block;margin-top:.25rem">{{ field.help_text }}</small>{% endif %}</div>{% endfor %}
+<div class="form-actions"><button class="button">{{ action }}</button><a class="button secondary" href="/data/{{ model_name }}/">Cancel</a></div></form></div>
+<script>
+function validateForm(form){let ok=true;form.querySelectorAll('[required]').forEach(f=>{if(!f.value.trim()){f.style.borderColor='#e74c3c';ok=false;f.addEventListener('input',function(){f.style.borderColor=''},{once:true})}});if(!ok)alert('Please fill all required fields.');return ok}
+</script>
+{% endblock %}

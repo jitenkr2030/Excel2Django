@@ -1,0 +1,4 @@
+{% extends "portal/base.html" %}{% block content %}
+<div class="heading"><div><p class="eyebrow">ACCOUNT</p><h1>My Profile</h1></div></div>
+<div class="panel"><form method="post" class="form-grid">{% csrf_token %}{% for field in form %}<div class="form-group"><label>{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}</div>{% endfor %}<div class="form-actions"><button class="button">Save Profile</button><a class="button secondary" href="/auth/password/change/">Change Password</a><a class="button secondary" href="/dashboard/">Cancel</a></div></form></div>
+{% endblock %}

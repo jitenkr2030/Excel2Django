@@ -1,0 +1,1 @@
+{% extends "portal/base.html" %}{% block content %}<div class="heading"><div><p class="eyebrow">EXPLORE</p><h1>All Datasets</h1></div></div><div class="stats">{% for item in stats %}<a class="card" href="{{ item.url }}"><span>{{ item.name }}</span><strong>{{ item.count }}</strong><small>View</small></a>{% endfor %}</div>{% endblock %}

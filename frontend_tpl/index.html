@@ -1,0 +1,107 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>__TITLE__</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+:root{--clr:__CLR__}
+*{box-sizing:border-box}body{background:#080c18;color:#edf2ff;font-family:Inter,system-ui,sans-serif;margin:0}
+.btn{padding:.75rem 1.5rem;border-radius:.5rem;font-weight:700;cursor:pointer;border:0;display:inline-block;text-decoration:none;transition:opacity .2s}.btn:hover{opacity:.85}
+.btn-p{background:var(--clr);color:#17210e}.btn-s{background:#26334b;color:#edf2ff}.btn-d{background:#e74c3c;color:#fff}
+.card{background:#121b2e;border:1px solid #27334a;border-radius:1rem;padding:1.5rem;transition:border-color .2s}.card:hover{border-color:var(--clr)}
+.inp{width:100%;padding:.75rem 1rem;border-radius:.5rem;border:1px solid #27334a;background:#0b1020;color:#edf2ff;outline:none;font-size:.95rem}.inp:focus{border-color:var(--clr)}
+.lbl{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9caac2;margin-bottom:.5rem;display:block}
+.hero{background:radial-gradient(circle at 70% 20%,#1a2a42,#080c18 70%)}
+.eyebrow{font-size:.7rem;letter-spacing:3px;font-weight:800;color:var(--clr);margin-bottom:.5rem}
+table{width:100%;border-collapse:collapse}th{background:#172239;color:#9caac2;font-size:.7rem;text-transform:uppercase;padding:.75rem 1rem;text-align:left}td{padding:.75rem 1rem;border-bottom:1px solid #27334a;font-size:.9rem}tr:hover{background:rgba(255,255,255,.02)}
+[v-cloak]{display:none}
+@media(max-width:768px){.hide-m{display:none!important}}
+</style></head><body>
+<div id="app" v-cloak>
+
+<nav class="fixed top-0 inset-x-0 z-50" style="background:#0b1020ee;border-bottom:1px solid #27334a">
+<div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+<a href="#/" class="text-xl font-black" style="text-decoration:none;color:#fff">__TITLE__<span style="color:var(--clr)">+</span></a>
+<div class="flex items-center gap-5">
+<a href="#/" class="text-sm text-gray-400" style="text-decoration:none">Home</a>
+<template v-if="auth"><a href="#/dashboard" class="text-sm text-gray-400" style="text-decoration:none">Dashboard</a><a href="#/explore" class="text-sm text-gray-400" style="text-decoration:none">Explore</a><span class="px-3 py-1 rounded-full text-xs font-bold" style="background:var(--clr);opacity:.2;color:var(--clr)">{{ user.role }}</span><button @click="logout" class="text-sm text-red-400" style="background:none;border:0;cursor:pointer">Logout</button></template>
+<template v-else><a href="#/login" class="text-sm text-gray-400" style="text-decoration:none">Login</a><a href="#/register" class="btn btn-p text-sm py-2 px-4">Get Started</a></template>
+</div></div></nav>
+<div style="padding-top:4rem">
+
+<!-- LANDING -->
+<div v-if="pg==='landing'" class="hero"><div class="max-w-7xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
+<div><p class="eyebrow">__TITLE__ PLATFORM</p><h1 class="text-5xl font-black leading-tight" style="letter-spacing:-2px">{{ hero }}</h1><p class="text-gray-400 text-lg mt-6">{{ sub }}</p>
+<div class="flex gap-4 mt-8"><template v-if="auth"><a href="#/dashboard" class="btn btn-p">Dashboard</a><a href="#/explore" class="btn btn-s">Explore</a></template><template v-else><a href="#/register" class="btn btn-p">Get Started</a><a href="#/login" class="btn btn-s">Sign In</a></template></div></div>
+<div class="grid gap-4"><div class="card"><div class="text-2xl">&#9733;</div><h3 class="font-bold text-lg mt-2">{{ cards[0] }}</h3><p class="text-gray-400 text-sm">Powerful tools.</p></div><div class="card"><div class="text-2xl">&#9829;</div><h3 class="font-bold text-lg mt-2">{{ cards[1] }}</h3><p class="text-gray-400 text-sm">Easy and fast.</p></div><div class="card"><div class="text-2xl">&#9881;</div><h3 class="font-bold text-lg mt-2">{{ cards[2] }}</h3><p class="text-gray-400 text-sm">Full control.</p></div></div></div>
+<div class="max-w-7xl mx-auto px-4 py-16"><p class="eyebrow text-center">FEATURES</p><h2 class="text-3xl font-black text-center mb-12">Everything you need</h2>
+<div class="grid md:grid-cols-3 gap-6"><div class="card"><div class="text-3xl">&#128274;</div><h3 class="font-bold mt-2">Secure Auth</h3></div><div class="card"><div class="text-3xl">&#128200;</div><h3 class="font-bold mt-2">Analytics</h3></div><div class="card"><div class="text-3xl">&#128176;</div><h3 class="font-bold mt-2">Payments</h3></div><div class="card"><div class="text-3xl">&#128221;</div><h3 class="font-bold mt-2">Content</h3></div><div class="card"><div class="text-3xl">&#128101;</div><h3 class="font-bold mt-2">Users</h3></div><div class="card"><div class="text-3xl">&#9881;</div><h3 class="font-bold mt-2">REST API</h3></div></div></div>
+<div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"><div class="card"><strong class="text-4xl block" style="color:var(--clr)">__COUNT__</strong><span class="text-gray-400 text-sm">Tables</span></div><div class="card"><strong class="text-4xl block" style="color:var(--clr)">1900+</strong><span class="text-gray-400 text-sm">Records</span></div><div class="card"><strong class="text-4xl block" style="color:var(--clr)">REST</strong><span class="text-gray-400 text-sm">API</span></div><div class="card"><strong class="text-4xl block" style="color:var(--clr)">3</strong><span class="text-gray-400 text-sm">Roles</span></div></div></div>
+
+<!-- LOGIN -->
+<div v-if="pg==='login'" class="max-w-md mx-auto px-4 py-20"><div class="card" style="padding:2.5rem"><div class="text-4xl text-center">&#128273;</div><h2 class="text-2xl font-black text-center mt-4">Welcome Back</h2><p class="text-gray-400 text-center text-sm mb-6">Sign in to continue</p>
+<div v-if="err" style="background:rgba(231,76,60,.1);color:#e74c3c;padding:.75rem;border-radius:.5rem;font-size:.85rem;margin-bottom:1rem">{{ err }}</div>
+<div style="display:flex;flex-direction:column;gap:1rem"><div><label class="lbl">Username</label><input v-model="lf.u" class="inp"></div><div><label class="lbl">Password</label><input v-model="lf.p" type="password" class="inp"></div><button @click="doLogin" class="btn btn-p" style="width:100%">Sign In</button></div>
+<p class="text-center text-gray-400 text-sm mt-6">No account? <a href="#/register" style="color:var(--clr);font-weight:700">Create one</a></p></div></div>
+
+<!-- REGISTER -->
+<div v-if="pg==='register'" class="max-w-lg mx-auto px-4 py-16"><div class="card" style="padding:2.5rem"><div class="text-4xl text-center">&#128101;</div><h2 class="text-2xl font-black text-center mt-4">Create Account</h2>
+<div v-if="err" style="background:rgba(231,76,60,.1);color:#e74c3c;padding:.75rem;border-radius:.5rem;font-size:.85rem;margin:1rem 0">{{ err }}</div>
+<div class="grid grid-cols-2 gap-4"><div><label class="lbl">First Name</label><input v-model="rf.fn" class="inp"></div><div><label class="lbl">Last Name</label><input v-model="rf.ln" class="inp"></div></div>
+<div style="margin-top:1rem"><label class="lbl">Username</label><input v-model="rf.u" class="inp"></div>
+<div style="margin-top:1rem"><label class="lbl">Email</label><input v-model="rf.e" type="email" class="inp"></div>
+<div style="margin-top:1rem"><label class="lbl">Password</label><input v-model="rf.p" type="password" class="inp"></div>
+<div style="margin-top:1rem"><label class="lbl">Join As</label><div class="flex gap-3">
+<label v-for="r in roles" :key="r.v" class="card flex-1 text-center cursor-pointer" :style="rf.r===r.v?'border-color:'+clr:''" @click="rf.r=r.v"><div class="text-xl" v-html="r.i"></div><div class="text-sm">{{ r.n }}</div></label></div></div>
+<button @click="doReg" class="btn btn-p" style="width:100%;margin-top:1.5rem">Create Account</button>
+<p class="text-center text-gray-400 text-sm mt-6">Have account? <a href="#/login" style="color:var(--clr);font-weight:700">Sign in</a></p></div></div>
+
+<!-- DASHBOARD -->
+<div v-if="pg==='dash'" class="max-w-7xl mx-auto px-4 py-8">
+<div class="card hero" style="padding:2.5rem;margin-bottom:2rem"><p class="eyebrow">WORKSPACE</p><h1 class="text-3xl font-black">Welcome, <span :style="'color:'+clr">{{ uname }}</span>!</h1><p class="text-gray-400 mt-2">{{ models.length }} datasets available</p></div>
+<h2 class="text-xl font-bold mb-4">All Datasets</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"><a v-for="m in models" :key="m.name" :href="'#/data/'+m.name" class="card cursor-pointer" style="text-decoration:none"><p class="text-gray-400 text-sm">{{ m.name }}</p><strong class="text-2xl block mt-1">&#8594;</strong><small class="text-gray-500">{{ m.rows }} rows</small></a></div>
+<div class="flex gap-3 mt-8"><a href="#/explore" class="btn btn-s">Explore</a><a href="/admin/" class="btn btn-s">Django Admin</a><a :href="api+'/api/'" class="btn btn-s">API</a></div></div>
+
+<!-- EXPLORE -->
+<div v-if="pg==='explore'" class="max-w-7xl mx-auto px-4 py-8"><h1 class="text-2xl font-black mb-2">All Datasets</h1><p class="text-gray-400 mb-6">Browse and manage all data tables.</p>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"><a v-for="m in models" :key="m.name" :href="'#/data/'+m.name" class="card cursor-pointer" style="text-decoration:none"><p class="text-gray-400 text-sm">{{ m.name }}</p><strong class="text-2xl block mt-1">&#8594;</strong><small class="text-gray-500">{{ m.fields.length }} fields</small></a></div></div>
+
+<!-- DATA LIST -->
+<div v-if="pg==='data'" class="max-w-7xl mx-auto px-4 py-8">
+<div class="flex items-center justify-between mb-6"><div><p class="eyebrow">DATA</p><h1 class="text-2xl font-black">{{ cur }}</h1></div><button @click="pg='form';rec={}" class="btn btn-p">+ Create</button></div>
+<input v-model="search" class="inp" style="margin-bottom:1rem" placeholder="Search...">
+<div class="card" style="overflow-x:auto;padding:0"><table><thead><tr><th>ID</th><th v-for="c in cols" :key="c">{{ c }}</th><th>Actions</th></tr></thead><tbody>
+<tr v-for="r in paged" :key="r.id"><td :style="'color:'+clr" class="cursor-pointer" @click="pg='detail';rec=r">{{ r.id }}</td><td v-for="c in cols" :key="c">{{ r[c]||'--' }}</td>
+<td class="whitespace-nowrap"><button @click="pg='detail';rec=r" class="btn btn-s" style="font-size:.75rem;padding:.35rem .75rem;margin-right:.25rem">View</button><button @click="pg='form';rec={...r}" class="btn" style="font-size:.75rem;padding:.35rem .75rem;margin-right:.25rem;background:rgba(52,152,219,.2);color:#60a5fa">Edit</button><button @click="delRec=r;pg='del'" class="btn" style="font-size:.75rem;padding:.35rem .75rem;background:rgba(231,76,60,.2);color:#e74c3c">Del</button></td></tr></tbody></table></div>
+<div class="flex justify-between items-center mt-4 text-sm text-gray-400"><span>Page {{ pn+1 }} of {{ tp }}</span><div class="flex gap-2"><button @click="pn>0&&pn--" class="btn btn-s" style="padding:.5rem 1rem;font-size:.85rem">Prev</button><button @click="pn<tp-1&&pn++" class="btn btn-s" style="padding:.5rem 1rem;font-size:.85rem">Next</button></div></div></div>
+
+<!-- DETAIL -->
+<div v-if="pg==='detail'" class="max-w-3xl mx-auto px-4 py-8">
+<div class="flex justify-between items-center mb-6"><h1 class="text-2xl font-black">Record #{{ rec.id }}</h1><div class="flex gap-2"><button @click="pg='form';rec={...rec}" class="btn btn-p text-sm">Edit</button><a :href="'#/data/'+cur" class="btn btn-s text-sm">Back</a></div></div>
+<div class="card"><table><tbody><tr v-for="(v,k) in rec" :key="k"><td class="font-bold text-gray-400" style="width:200px">{{ k }}</td><td>{{ v||'--' }}</td></tr></tbody></table></div></div>
+
+<!-- FORM -->
+<div v-if="pg==='form'" class="max-w-3xl mx-auto px-4 py-8">
+<div class="flex justify-between mb-6"><h1 class="text-2xl font-black">{{ rec.id?'Edit':'Create' }} Record</h1><a :href="'#/data/'+cur" class="btn btn-s text-sm">Cancel</a></div>
+<div v-if="err" style="background:rgba(231,76,60,.1);color:#e74c3c;padding:.75rem;border-radius:.5rem;font-size:.85rem;margin-bottom:1rem">{{ err }}</div>
+<div class="card"><div class="grid md:grid-cols-2 gap-4"><div v-for="c in cols" :key="c"><label class="lbl">{{ c }}</label><input v-model="rec[c]" class="inp"></div></div>
+<div class="flex gap-3" style="margin-top:1.5rem"><button @click="save" class="btn btn-p">{{ rec.id?'Save':'Create' }}</button><a :href="'#/data/'+cur" class="btn btn-s">Cancel</a></div></div></div>
+
+<!-- DELETE -->
+<div v-if="pg==='del'" class="max-w-md mx-auto px-4 py-20"><div class="card" style="padding:2.5rem;border-color:rgba(231,76,60,.3)">
+<div class="text-4xl text-center">&#9888;</div><h2 class="text-xl font-black text-center mt-4">Delete Record?</h2><p class="text-gray-400 text-center text-sm my-4">This cannot be undone.</p>
+<div class="flex gap-3"><button @click="doDel" class="btn btn-d" style="flex:1">Delete</button><a :href="'#/data/'+cur" class="btn btn-s" style="flex:1;text-align:center">Cancel</a></div></div></div>
+
+<!-- ABOUT -->
+<div v-if="pg==='about'" class="hero"><div class="max-w-7xl mx-auto px-4 py-20"><p class="eyebrow">ABOUT</p><h1 class="text-5xl font-black">We Are <span :style="'color:'+clr">__TITLE__</span></h1><p class="text-gray-400 text-lg mt-6 max-w-2xl">{{ sub }}</p>
+<div class="grid md:grid-cols-3 gap-6 mt-12"><div class="card"><div class="text-3xl">&#128274;</div><h3 class="font-bold mt-2">Secure</h3></div><div class="card"><div class="text-3xl">&#128200;</div><h3 class="font-bold mt-2">Data</h3></div><div class="card"><div class="text-3xl">&#9881;</div><h3 class="font-bold mt-2">API</h3></div></div></div></div>
+
+<!-- CONTACT -->
+<div v-if="pg==='contact'" class="max-w-md mx-auto px-4 py-20"><div class="card" style="padding:2.5rem"><h2 class="text-2xl font-black text-center">Get In Touch</h2><div style="display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem"><div><label class="lbl">Name</label><input class="inp"></div><div><label class="lbl">Email</label><input class="inp" type="email"></div><div><label class="lbl">Message</label><textarea class="inp" rows="5"></textarea></div><button class="btn btn-p">Send Message</button></div></div></div>
+
+<!-- FAQ -->
+<div v-if="pg==='faq'" class="max-w-3xl mx-auto px-4 py-20"><h1 class="text-3xl font-black text-center mb-12">FAQ</h1>
+<div class="grid gap-4"><div class="card"><h3 class="font-bold">How do I start?</h3><p class="text-gray-400 text-sm mt-2">Register and choose your role.</p></div><div class="card"><h3 class="font-bold">Is it free?</h3><p class="text-gray-400 text-sm mt-2">Yes, all features included.</p></div><div class="card"><h3 class="font-bold">API access?</h3><p class="text-gray-400 text-sm mt-2">Get token at /api/auth/token/</p></div></div></div>
+
+</div>
+<script src="app.js"></script></body></html>
